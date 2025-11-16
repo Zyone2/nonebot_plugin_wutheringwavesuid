@@ -3,14 +3,22 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, List, Literal, cast
 from typing_extensions import override
+import base64
 
+from pathlib import Path
+from copy import deepcopy
 from . import AbstractProtocol
 from ..entity import Message, MessageReceive
-from ..utils import command_start, del_file, store_file  # 保持 command_start 导入
 
 from nonebot.compat import model_dump
 from nonebot.permission import SUPERUSER
 from pydantic import BaseModel
+from nonebot import get_driver
+
+
+driver = get_driver()
+command_start = deepcopy(driver.config.command_start)
+command_start.discard("")
 
 if TYPE_CHECKING:
     from nonebot.adapters.onebot.v11 import (
@@ -271,3 +279,13 @@ class OneBotV11Protocol(AbstractProtocol, protocol_name="onebot"):
             "type": "node",
             "data": {"name": name, "uin": uin, "content": msg},
         }
+
+def store_file(path: Path, file: str):
+    file_content = base64.b64decode(file).decode()
+    with path.open("w") as f:
+        f.write(file_content)
+
+
+def del_file(path: Path):
+    if path.exists():
+        path.unlink()

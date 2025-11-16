@@ -8,11 +8,18 @@ from .gsuid_core_compat import (
     Event as ShimEvent,
     shim_command_handler  # <-- 导入新的 Handler
 )
-from .utils import command_start  # 导入 nonebot 的命令前缀
+
 
 from nonebot import logger
 from nonebot.adapters import Bot as NB_Bot  # 区分 NoneBot 的 Bot
 
+
+from nonebot import get_driver
+
+from copy import deepcopy
+driver = get_driver()
+command_start = deepcopy(driver.config.command_start)
+command_start.discard("")
 active_protocols: dict[str, AbstractProtocol] = {}
 CAST_MAP = {"qqguild": "qq", "qqgroup": "qq"}
 

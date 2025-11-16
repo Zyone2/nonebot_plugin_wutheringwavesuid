@@ -6,7 +6,7 @@ GenshinUID Core 兼容层 (Shim) V4
 """
 import re
 from typing import Any, Dict, List, Optional, Tuple, Callable, Union
-
+from nonebot.adapters.onebot.v11.message import MessageSegment
 # -------------------------------------------------------------------
 # 1. 从 NoneBot 插件内部导入
 # -------------------------------------------------------------------
